@@ -5,6 +5,6 @@ Unity, C#
 ## Iteration 01
 One player v.s. Dealer Game Mode.
 ### Design Class Diagram
-![input](OOAD-BlackJack/Document/DesignClass01.png)
+![image](https://raw.githubusercontent.com/ceej7/OOAD-BlackJack/master/Document/DesignClass01.png)
 ### Demo
-![input](OOAD-BlackJack/Display/Demo01.jpg)
+![image](https://raw.githubusercontent.com/ceej7/OOAD-BlackJack/master/Display/Demo01.jpg)
