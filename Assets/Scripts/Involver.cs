@@ -1,15 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public abstract class Involver : MonoBehaviour {
+using UnityEngine.Networking;
+public abstract class Involver : NetworkBehaviour {
     public bool isStopped; //need more cards or not
     public List<Card> mycards; // my cards list
-
-    //For cards[0] lifting and reversing
-    public Transform pos1;
-    public Transform revealPos1;
-    public Transform liftPos1;
+    public CardsManager cm;
 
     /// <summary>
     /// return the step if stopped
@@ -67,8 +63,9 @@ public abstract class Involver : MonoBehaviour {
         while (mycards.Count != 0)
         {
             Card card = mycards[0];
-            card.gameObject.SetActive(false);
             mycards.RemoveAt(0);
+            NetworkServer.Destroy(card.gameObject);
+            //card.gameObject.SetActive(false);
         }
         isStopped = false;
     }

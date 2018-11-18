@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class Dealer : Involver {
 
@@ -8,7 +9,11 @@ public class Dealer : Involver {
     void Start()
     {
         isStopped = false;
+        //Debug.Log("--------------------------(21 - 10) / 10=" + (21 - 10) / 10);
+        //Debug.Log("--------------------------(21 - 11) / 10=" + (21 - 11) / 10);
+        //Debug.Log("--------------------------(21 - 12) / 10=" + (21 - 12) / 10);
     }
+
 
     /// <summary>
     /// ai judge step
@@ -131,8 +136,9 @@ public class Dealer : Involver {
             playerN = playerN > playerAceNum ? playerAceNum : playerN;
 
             mySum += myN * 10;
-            playerN += playerN * 10;
-            if(mySum>21||playerSum>21)
+            playerSum += playerN * 10;
+            //Debug.Log("mySum:" + mySum + "---" + "playerSum:" + playerSum + "---" + "myCardsNum:" + myCardsNum + "---" + "playerCardsNum:" + playerCardsNum + "---" + "myAceNum:" + myAceNum + "---" + "playerAceNum:" + playerAceNum);
+            if (mySum>21||playerSum>21)
             {
                 Debug.Log("Exception: logical mistake when adding up to maxSum no more than 21");
                 return 0;
@@ -151,6 +157,6 @@ public class Dealer : Involver {
     /// </summary>
     public void revealMyCard()
     {
-        mycards[0].movetoTarget(liftPos1, revealPos1,true);
+        cm.revealCard(0, mycards[0].gameObject);
     }
 }

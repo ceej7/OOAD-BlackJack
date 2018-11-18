@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Card : MonoBehaviour {
+public class Card : NetworkBehaviour
+{
 
     public int no;
 
 
 
-    const float speed = 2f;
+    const float speed = 4f;
     const float rotateSpeed = 8f;
     private Transform liftedPos = null;
     private Transform destination=null;
@@ -29,6 +31,7 @@ public class Card : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if (!isServer) return;
         //To do
         //For specific card -> binding object
         //To perform first lift, second reverse, than interpolated 
@@ -47,7 +50,10 @@ public class Card : MonoBehaviour {
             if(Vector3.Distance(gameObject.transform.position, liftedPos.position)<=0.1f)
             {
                 liftedPos = null;
-                transformStep = 1;
+                if(needToRevse)
+                    transformStep = 1;
+                else
+                    transformStep = 2;
             }
         }
         //control the rotation
@@ -89,15 +95,15 @@ public class Card : MonoBehaviour {
     /// <param name="toRev"></param>
     public void movetoTarget(Transform liftedDes,Transform targetDes,bool toRev)
     {
-        this.gameObject.transform.parent = targetDes;
+        //this.gameObject.transform.parent = targetDes;
         liftedPos = liftedDes;
         destination = targetDes;
         needToRevse = toRev;
-        
-        //not to rev Step=2, rev Step=0->1->2
-        if(toRev) transformStep = 0;
-        else transformStep = 2;
 
+        //not to rev Step=2, rev Step=0->1->2
+        //if(toRev) transformStep = 0;
+        //else transformStep = 2;
+        transformStep = 0;
 
     }
 

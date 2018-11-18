@@ -2,23 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+
 public class Player : Involver {
+
+    public int no;
+    public bool isConnected;
     public int balance;
     public int jackpot;
     public GameManager gm;
-    public UserPanel userPanel;
+    public PlayerConn myConn;
 
 	// Use this for initialization
 	void Start () {
-        balance = 10000;
-        jackpot = 0;
-        isStopped = false ;
+        isStopped = false;
+        isConnected = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
         //Promise the balance and jackpot text up-2-date
-        userPanel.updateUserAccount(jackpot, balance);
+        //userPanel.updateUserAccount(jackpot, balance);
 
     }
 
@@ -27,27 +31,58 @@ public class Player : Involver {
         return isStopped;
     }
 
-    public bool addChip(int chip)
-    {
-        if ((balance - chip) < 0)
-            return false;
-        balance = balance - chip;
-        jackpot = jackpot + chip;
-        return true;
-        
-    }
-
     public void winGame(float times)
     {
-        userPanel.winDisplay(jackpot + (int)(jackpot * times),5);
-        balance += (int)(jackpot * times)+jackpot;
-        jackpot = 0;
+        myConn.RpcwinDisplay(jackpot + (int)(jackpot * times));
+        changeAccount(balance + (int)(jackpot * times) + jackpot, 0);
     }
     
     public void loseGame()
     {
-        userPanel.loseDisplay(5);
-        jackpot = 0;
+        myConn.RpcloseDisplay();
+        changeAccount(balance, 0);
     }
 
+
+
+    public void addChip(int chip)
+    {
+        if ((balance - chip) < 0)
+            return ;
+        changeAccount(balance - chip, jackpot + chip);
+        gm.continueGame(no);
+    }
+
+    public void bindConnection(PlayerConn conn)
+    {
+        myConn = conn;
+        conn.player = this;
+        isConnected = true;
+        changeAccount(10000, 0);
+    }
+
+    public void changeAccount(int bal,int jack)
+    {
+        balance = bal;
+        jackpot = jack;
+        myConn.RpcupdateAccount(bal, jack);
+    }
+
+    public void wantAntoherCard()
+    {
+        myConn.RpcWantAnotherCard();
+    }
+
+    public void moreCards(bool more)
+    {
+        if (more)
+        {
+            gm.sendAnotherCard(no, hasHowManyCards());
+        }
+        else
+        {
+            isStopped = true;
+            gm.continueGame(no);
+        }
+    }
 }

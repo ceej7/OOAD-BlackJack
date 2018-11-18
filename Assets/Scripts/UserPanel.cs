@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+
 public class UserPanel : MonoBehaviour
 {
     public Button bt5;
@@ -11,23 +13,28 @@ public class UserPanel : MonoBehaviour
     public Button bt100;
     public Button btMore;
     public Button btStop;
+    public Button btReady;
 
     public Text balaceText;
     public Text jackpotText;
 
-
     public Text centralText;
     void Start()
     {
-
+        disableAllButton();
         balaceText.gameObject.SetActive(true);
         jackpotText.gameObject.SetActive(true);
         centralText.gameObject.SetActive(false);
+        btReady.gameObject.SetActive(false);
     }
 
+    public void enableReadyButton()
+    {
+        btReady.gameObject.SetActive(true);
+    }
     public void enableChipButton()
     {
-        StartCoroutine(enableChipBT(0.3f));
+        StartCoroutine(enableChipBT(0.05f));
     }
     public void enableCardButton()
     {
@@ -43,6 +50,7 @@ public class UserPanel : MonoBehaviour
         bt100.gameObject.SetActive(false);
         btMore.gameObject.SetActive(false);
         btStop.gameObject.SetActive(false);
+        btReady.gameObject.SetActive(false);
     }
 
     public void updateUserAccount(int jackpot, int balance)
@@ -87,4 +95,5 @@ public class UserPanel : MonoBehaviour
         yield return new WaitForSeconds(interval);
         bt100.gameObject.SetActive(true);
     }
+
 }
